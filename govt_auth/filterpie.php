@@ -22,7 +22,7 @@ Session_Start();
    </head>
 <body>
 
-     <?php include("header.php");?>
+     
         <div class="container" style="border:none;"> 
                 
                 <div class="row">
@@ -33,7 +33,7 @@ Session_Start();
                                     <h5><b>External Criteria</b></h5>
                                         <div>
             
-		 		 <form method="GET" action="filterpie1.php">
+		 		 <form method="GET" action="filterpie.php">
 
 
 <div class="input-field col s3">
@@ -55,7 +55,7 @@ Session_Start();
 			$_SESSION['District'] = $_GET['District'];
 			}
 ?>
-
+<div id="myChart" style="margin-top:5%;"></div>
 </div>
 </div>    
 </span>
@@ -65,7 +65,105 @@ Session_Start();
 </div>
 </div>
 </div> 
-             
+  <?php
+include "conn.php";	
+
+if(isset($_GET['submit']))
+	{
+		$District = $_GET['District'];
+	
+		$sql1 = "SELECT count(s.gender) FROM students s,schools sc where s.Index_No=sc.Index_No and s.gender=1 and sc.District='$District' order by s.gender";
+		$data=$conn->query($sql1);
+		$sql2 = "SELECT count(s.gender) FROM students s,schools sc where s.Index_No=sc.Index_No and s.gender=0 and sc.District='$District' order by s.gender";
+		$dataa=$conn->query($sql2);
+
+		$info=mysqli_fetch_array($data);
+		$inf=mysqli_fetch_array($dataa);
+
+
+
+	}
+?>
+
+
+
+
+<script>
+	
+	
+		var myConfig = {
+ 	type: "pie", 
+ 	backgroundColor: "#2B313B",
+ 	plot: {
+ 	  borderColor: "#2B313B",
+ 	  borderWidth: 5,
+ 	  // slice: 90,
+ 	  valueBox: {
+ 	    placement: 'out',
+ 	    text: '%t\n%npv%',
+ 	    fontFamily: "Open Sans"
+ 	  },
+ 	  tooltip:{
+ 	    fontSize: '18',
+ 	    fontFamily: "Open Sans",
+ 	    padding: "5 10",
+ 	    text: "%npv%"
+ 	  },
+ 	  animation:{
+      effect: 2, 
+      method: 5,
+      speed: 500,
+      sequence: 1
+    }
+ 	},
+ 	source: {
+ 	  text: 'gs.statcounter.com',
+ 	  fontColor: "#8e99a9",
+ 	  fontFamily: "Open Sans"
+ 	},
+ 	title: {
+ 	  fontColor: "#fff",
+	  align:"CENTER",
+ 	  text: 'Ratio of Males and Females of \n Primary Schools in \n<?php echo $District?> ',
+ 	  align: "left",
+ 	  offsetX: 15,
+ 	  fontFamily: "Open Sans",
+ 	  fontSize: 25
+ 	},
+ 	subtitle: {
+ 	  offsetX: 20,
+ 	  offsetY: 10,
+ 	  fontColor: "#8e99a9",
+ 	  fontFamily: "Open Sans",
+ 	  fontSize: "16",
+ 	  align: "left"
+ 	},
+ 	plotarea: {
+ 	  margin: "20 0 0 0"  
+ 	},
+	series : [
+		{
+			values : [<?php echo $info[0] ?>],
+			text: "Male",
+		  backgroundColor: '#50ADF5',
+		},
+		{
+		  values: [<?php echo $inf[0] ?>],
+		  text: "Female",
+		  
+		  backgroundColor: '#FF7965'
+		}
+	]
+};
+ 
+zingchart.render({ 
+	id : 'myChart', 
+	data : myConfig, 
+	height: 300, 
+	width: 450
+});
+	</script>
+           
 
             
 

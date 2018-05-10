@@ -4,7 +4,7 @@
         
      
 
-        <a href="#" class="brand-logo center">Smart India Hackathon</a>
+        <a href="govt_dashboard.php" class="brand-logo center">Smart India Hackathon</a>
 
         <ul id="slide-out" class="left side-nav">
                			<li><a href="showAllSchools.php">View Schools</a></li>
